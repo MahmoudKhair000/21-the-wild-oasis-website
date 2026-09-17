@@ -8,8 +8,15 @@ const nextConfig = {
         port: '',
         pathname: '/storage/v1/object/public/cabin-images/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'flags.restcountries.com',
+        port: '',
+        pathname: '/v5/w640/**',
+      },
     ],
   },
+  // output: 'export',
 };
 
 export default nextConfig;

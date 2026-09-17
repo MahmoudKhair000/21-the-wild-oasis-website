@@ -1,6 +1,7 @@
 import { eachDayOfInterval } from 'date-fns';
 import supabase from './supabase';
 import { notFound } from 'next/navigation';
+import jsonCountries from './countries.json';
 
 /////////////
 // GET
@@ -142,12 +143,37 @@ export async function getSettings() {
 
 export async function getCountries() {
   try {
-    const res = await fetch(
-      'https://restcountries.com/v2/all?fields=name,flag',
-    );
-    const countries = await res.json();
+    // const apiKey = process.env.REST_COUNTRIES_API_KEY;
+    // if (!apiKey) throw new Error('REST_COUNTRIES_API_KEY is not configured');
+
+    // const countries = [];
+    // let offset = 0;
+    // let more = true;
+
+    // while (more) {
+    //   const res = await fetch(
+    //     `https://api.restcountries.com/countries/v5?limit=100&offset=${offset}&response_fields=names.common,flag`,
+    //     { headers: { Authorization: `Bearer ${apiKey}` } },
+    //   );
+
+    //   if (!res.ok) throw new Error(`Countries API returned ${res.status}`);
+
+    //   const { data } = await res.json();
+    //   countries.push(
+    //     ...data.objects.map((country) => ({
+    //       name: country.names.common,
+    //       flag: country.flag,
+    //     })),
+    //   );
+
+    //   more = data.meta.more;
+    //   offset += data.meta.count;
+    // }
+
+    const countries = jsonCountries;
     return countries;
-  } catch {
+  } catch (error) {
+    console.error(error);
     throw new Error('Could not fetch countries');
   }
 }
