@@ -1,5 +1,5 @@
 import { Josefin_Sans } from 'next/font/google';
-import { ReservationProvider } from '@/app/_contexts/reservationContext';
+import { ReservationProvider } from '@/app/_contexts/ReservationContext';
 
 const josefin = Josefin_Sans({
   subsets: ['latin'],

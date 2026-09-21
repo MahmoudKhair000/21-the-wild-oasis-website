@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { DayPicker } from 'react-day-picker';
 // DayPicker uses Context, this component needs to be client
 import 'react-day-picker/style.css';
-import { useReservation } from '@/app/_contexts/reservationContext';
+import { useReservation } from '@/app/_contexts/ReservationContext';
 
 function isAlreadyBooked(range, datesArr) {
   return (
