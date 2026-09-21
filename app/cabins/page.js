@@ -1,14 +1,26 @@
 import CabinList from '@/app/_components/CabinList';
-import { Suspense } from 'react';
 import Spinner from '@/app/_components/Spinner';
+import Filter from '@/app/_components/Filter';
+import { Suspense } from 'react';
 // import Counter from '@/app/_components/Counter';
+
+// // export const revalidate = 0;
+// export const revalidate = 3600;
+// // export const revalidate = 15;
+
+// // searchParams make this page dynamic, so revalidate is unnecessary.
 
 export const metadata = {
   title: 'Cabins',
 };
 
-export default function Page() {
-  // CHANGED!
+export default function Page({ searchParams }) {
+  // using search params turns this page to dynamic.
+  // searchParams is only available here in page.js,
+  // , so pass the filter to CabinList as a prop.
+  // console.log(searchParams);
+
+  const filter = searchParams?.capacity ?? 'all';
 
   return (
     <div>
@@ -24,8 +36,15 @@ export default function Page() {
         Welcome to paradise.
       </p>
 
-      <Suspense fallback={<Spinner />}>
-        <CabinList />
+      <div className="flex justify-end mb-8">
+        <Filter />
+      </div>
+      {/* giving Suspense a key will force it to re-render when the filter changes, so that the fallback is shown while the new data is being fetched. Otherwise, it will just show the old data until the new data is ready. */}
+      <Suspense
+        fallback={<Spinner />}
+        key={filter}
+      >
+        <CabinList filter={filter} />
       </Suspense>
     </div>
   );

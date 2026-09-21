@@ -1,3 +1,5 @@
+'use client';
+
 import {
   CalendarDaysIcon,
   HomeIcon,
@@ -5,33 +7,41 @@ import {
 } from '@heroicons/react/24/solid';
 import SignOutButton from './SignOutButton';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 const navLinks = [
   {
     name: 'Home',
     href: '/account',
-    icon: <HomeIcon className='h-5 w-5 text-primary-600' />,
+    icon: <HomeIcon className="h-5 w-5 text-primary-600" />,
   },
   {
     name: 'Reservations',
     href: '/account/reservations',
-    icon: <CalendarDaysIcon className='h-5 w-5 text-primary-600' />,
+    icon: <CalendarDaysIcon className="h-5 w-5 text-primary-600" />,
   },
   {
     name: 'Guest profile',
     href: '/account/profile',
-    icon: <UserIcon className='h-5 w-5 text-primary-600' />,
+    icon: <UserIcon className="h-5 w-5 text-primary-600" />,
   },
 ];
 
 function SideNavigation() {
+  const pathname = usePathname();
+  // console.log(pathname);
+
   return (
-    <nav className='border-r border-primary-900 min-h-full flex-1'>
-      <ul className='flex flex-col gap-2 h-full text-lg'>
+    <nav className="border-r border-primary-900 min-h-full flex-1">
+      <ul className="flex flex-col gap-2 h-full text-lg">
         {navLinks.map((link) => (
           <li key={link.name}>
             <Link
-              className={`py-3 px-5 hover:bg-primary-900 hover:text-primary-100 transition-colors flex items-center gap-4 font-semibold text-primary-200`}
+              className={`
+                ${link.href === pathname
+                  ? 'font-bold bg-primary-900'
+                  : ''
+                } py-3 px-5  hover:text-primary-100 transition-colors flex items-center gap-4 text-primary-200 hover:bg-primary-900`}
               href={link.href}
             >
               {link.icon}
@@ -40,7 +50,7 @@ function SideNavigation() {
           </li>
         ))}
 
-        <li className='mt-auto'>
+        <li className="mt-auto">
           <SignOutButton />
         </li>
       </ul>
