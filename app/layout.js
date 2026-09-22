@@ -1,5 +1,8 @@
-import { Josefin_Sans } from 'next/font/google';
+import Header from '@/app/_components/Header';
 import { ReservationProvider } from '@/app/_contexts/ReservationContext';
+import '@/app/_styles/globals.css';
+
+import { Josefin_Sans } from 'next/font/google';
 
 const josefin = Josefin_Sans({
   subsets: ['latin'],
@@ -12,9 +15,6 @@ const josefin = Josefin_Sans({
     className: '__className_a8383b' // always changes
   } */
 });
-// console.log(josefin)
-import '@/app/_styles/globals.css';
-import Header from '@/app/_components/Header';
 
 export const metadata = {
   // title: 'The Wild Oasis',

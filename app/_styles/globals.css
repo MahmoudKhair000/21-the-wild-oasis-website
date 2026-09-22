@@ -36,6 +36,7 @@
 	/* --rdp-cell-size: 32px !important; */
 	--rdp-accent-color: theme('colors.accent.500') !important;
 	--rdp-background-color: theme('colors.accent.600') !important;
+	--rdp-range_middle-background-color: theme('colors.accent.600') !important;
 	--rdp-day-width: 20px !important;
 	--rdp-day-height: 20px !important;
 	--rdp-day_button-width: 32px !important;

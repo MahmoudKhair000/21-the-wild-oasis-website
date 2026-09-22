@@ -2,6 +2,7 @@ import CabinList from '@/app/_components/CabinList';
 import Spinner from '@/app/_components/Spinner';
 import Filter from '@/app/_components/Filter';
 import { Suspense } from 'react';
+import ReservationReminder from '@/app/_components/ReservationReminder';
 // import Counter from '@/app/_components/Counter';
 
 // // export const revalidate = 0;
@@ -45,6 +46,7 @@ export default function Page({ searchParams }) {
         key={filter}
       >
         <CabinList filter={filter} />
+        <ReservationReminder />
       </Suspense>
     </div>
   );
