@@ -60,7 +60,7 @@ export async function getGuest(email) {
   const { data, error } = await supabase
     .from('guests')
     .select('*')
-    .eq('email', email)
+    .eq('email', String(email))
     .single();
 
   // No error here! We handle the possibility of no guest in the sign in callback

@@ -14,6 +14,12 @@ const nextConfig = {
         port: '',
         pathname: '/v5/w640/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
   // output: 'export',
