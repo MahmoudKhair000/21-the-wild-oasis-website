@@ -4,14 +4,15 @@ import Image from 'next/image';
 
 export default async function Navigation() {
   const session = await auth();
-  console.log(session);
+  // console.log(session);
 
   /**
 {
   user: {
     name: 'Mahmoud Al-Seyyid',
     email: 'mahmoudkhair01010789887@gmail.com',
-    image: 'https://lh3.googleusercontent.com/a/ACg8ocLn2EDBRLC1xU3bgGvp6Ou4dD5jix72Gfog5p6eHZvca8tXaRTV=s96-c'
+    image: 'https://lh3.googleusercontent.com/a/ACg8ocLn2EDBRLC1xU3bgGvp6Ou4dD5jix72Gfog5p6eHZvca8tXaRTV=s96-c',
+    guestId: 1119
   },
   expires: '2026-10-23T23:43:06.919Z'
 }

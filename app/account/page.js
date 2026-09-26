@@ -9,7 +9,7 @@ export default async function Page() {
   const session = await auth();
   const firstName = session.user.name.split(' ')[0];
 
-  console.log(session);
+  // console.log(session);
 
   return (
     <div>

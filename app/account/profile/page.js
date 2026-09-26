@@ -1,12 +1,19 @@
 import SelectCountry from '@/app/_components/SelectCountry';
+// a server component that is imported in a server component and passed as children to a client component.
 import UpdateProfileForm from '@/app/_components/UpdateProfileForm';
+// a client component that is imported in a server component and passed a server component as children.
+import { auth } from '@/app/_lib/auth';
+import { getGuest } from '@/app/_lib/data-service';
 
 export const metadata = {
   title: 'Update profile',
 };
 
-export default function Page() {
-  const nationality = 'portugal';
+export default async function Page() {
+  const session = await auth();
+  const guest = await getGuest(session?.user?.email);
+
+  // const nationality = 'portugal';
 
   return (
     <div>
@@ -20,13 +27,13 @@ export default function Page() {
       </p>
 
       {/* Client Component ↓*/}
-      <UpdateProfileForm>
+      <UpdateProfileForm guest={guest}>
         {/* Server Component ↓, but imported in a server component and passed as children*/}
         <SelectCountry
           name="nationality"
           id="nationality"
           className="px-5 py-3 bg-primary-200 text-primary-800 w-full shadow-sm rounded-sm"
-          defaultCountry={nationality}
+          defaultCountry={`${guest.nationality}%${guest.countryFlag}`}
         />
       </UpdateProfileForm>
     </div>
