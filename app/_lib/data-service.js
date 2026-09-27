@@ -149,6 +149,9 @@ export async function getSettings() {
 
 export async function getCountries() {
   try {
+    const countries = jsonCountries;
+    return countries;
+
     // const apiKey = process.env.REST_COUNTRIES_API_KEY;
     // if (!apiKey) throw new Error('REST_COUNTRIES_API_KEY is not configured');
 
@@ -175,9 +178,6 @@ export async function getCountries() {
     //   more = data.meta.more;
     //   offset += data.meta.count;
     // }
-
-    const countries = jsonCountries;
-    return countries;
   } catch (error) {
     console.error(error);
     throw new Error('Could not fetch countries');

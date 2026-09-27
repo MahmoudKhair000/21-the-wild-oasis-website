@@ -1,14 +1,11 @@
 'use client';
 
-import Image from 'next/image';
-// import { useState } from 'react';
 import { updateGuest } from '@/app/_lib/actions';
-import { cloneElement } from 'react';
+import Image from 'next/image';
 import { useFormStatus } from 'react-dom';
-import SpinnerMini from './SpinnerMini';
 
 function UpdateProfileForm({ guest, children }) {
-  const { fullName, email, nationality, nationalID, countryFlag } = guest;
+  const { fullName, email, nationalID, countryFlag } = guest;
 
   return (
     <form
@@ -40,7 +37,7 @@ function UpdateProfileForm({ guest, children }) {
       <div className="space-y-2">
         <div className="flex items-center justify-between">
           <label htmlFor="nationality">Where are you from?</label>
-          <div className="h-6 w-9 rounded-sm relative">
+          <div className="h-6 w-9 rounded-sm relative ">
             {countryFlag && (
               <Image
                 src={countryFlag}
@@ -51,7 +48,7 @@ function UpdateProfileForm({ guest, children }) {
             )}
           </div>
         </div>
-
+        {/* The select element */}
         {children}
       </div>
 
@@ -72,9 +69,8 @@ function UpdateProfileForm({ guest, children }) {
 }
 
 function Button() {
-
+  // it has to be wrapped in a form element
   const status = useFormStatus();
-  console.log(status);
 
   return (
     <button

@@ -11,8 +11,9 @@ export const metadata = {
 
 export default async function Page() {
   const session = await auth();
-  const guest = await getGuest(session?.user?.email);
+  const guest = await getGuest(session.user.email);
 
+  const { nationality, countryFlag } = guest;
   // const nationality = 'portugal';
 
   return (
@@ -33,7 +34,7 @@ export default async function Page() {
           name="nationality"
           id="nationality"
           className="px-5 py-3 bg-primary-200 text-primary-800 w-full shadow-sm rounded-sm"
-          defaultCountry={`${guest.nationality}%${guest.countryFlag}`}
+          defaultCountry={`${nationality}%${countryFlag}`}
         />
       </UpdateProfileForm>
     </div>

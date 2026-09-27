@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { auth } from '@/app/_lib/auth';
 
 export const metadata = {
@@ -18,6 +17,7 @@ export default async function Page() {
       </h2>
       <hr />
       <br />
+      <hr />
       <br />
       <hr />
     </div>

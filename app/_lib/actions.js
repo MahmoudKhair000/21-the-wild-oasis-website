@@ -1,8 +1,11 @@
 'use server';
-// use server directive is required to use server actions, not for server components.
-import supabase from './supabase';
-import { auth, signIn, signOut } from './auth';
+// 'use server' directive is required to use server actions
+// , not for server components.
 import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
+import { auth, signIn, signOut } from './auth';
+import { getBookings } from './data-service';
+import supabase from './supabase';
 
 export async function updateGuest(formData) {
   // 1. Check if there is an authenticated user session
@@ -37,9 +40,71 @@ export async function updateGuest(formData) {
   revalidatePath('/account/profile');
 }
 
-export async function signInAction() {
-  await signIn('google', { redirectTo: '/account' });
+export async function deleteReservation(bookingId) {
+  const session = await auth();
+  if (!session) throw new Error('You must be logged in');
+
+  const guestBookings = await getBookings(session.user.guestId);
+  const guestBookingsIds = guestBookings.map((booking) => booking.id);
+  if (!guestBookingsIds.includes(bookingId))
+    throw new Error('You are not authorized to delete this booking !');
+
+  const { error } = await supabase
+    .from('bookings')
+    .delete()
+    .eq('id', bookingId);
+  if (error) throw new Error('Could not delete reservation');
+
+  revalidatePath('/account/reservations');
 }
+
+export async function updateReservation(formData) {
+  const bookingId = formData.get('reservationId');
+  // 1. Authentication layer
+  const session = await auth();
+  if (!session) throw new Error('You must be logged in');
+
+  // 2. Authorization layer
+  // getting booking Ids for the signed in user.
+  const bookings = await getBookings(session.user.guestId);
+  const bookingIds = bookings.map((b) => `${b.id}`);
+  // checking if this booking belongs to the user
+  if (!bookingIds.includes(bookingId))
+    throw new Error('You are not authorized to edit this booking !');
+
+  // 3. editing reseration
+  // making rawFormData object
+  const rawFormData = Object.fromEntries(formData.entries());
+  // console.log(rawFormData);
+  const updateData = {
+    numGuests: rawFormData.numGuests,
+    observations: rawFormData.observations.slice(0, 1000),
+  };
+  // console.log(updateData);
+  const { error } = await supabase
+    .from('bookings')
+    .update(updateData)
+    .eq('id', rawFormData.reservationId);
+  if (error) throw new Error('Could not update reservation!!');
+
+  // 4. use useFormStatus() to handle the UI state
+  // in a client componenet button in ↓
+  // @/app/account/reservations/edit/[reservationId]/page.js
+
+  // 5. revalidate cache using revalidatePath()
+  revalidatePath('/account/reservations');
+  revalidatePath(`/account/reservations/edit/${bookingId}`);
+
+  // 6. redirect to all reservations
+  redirect('/account/reservations');
+}
+
+export async function signInAction(callbackUrl) {
+  await signIn('google', { redirectTo: callbackUrl });
+
+  revalidatePath(callbackUrl);
+}
+
 export async function signOutAction() {
   await signOut({ redirectTo: '/' });
 }

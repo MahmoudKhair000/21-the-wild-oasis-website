@@ -9,6 +9,7 @@ const authConfif = {
       clientSecret: process.env.AUTH_GOOGLE_SECRET,
     }),
   ],
+
   callbacks: {
     authorized({ auth, request }) {
       return !!auth;
@@ -17,9 +18,12 @@ const authConfif = {
     async signIn({ user, account, profile }) {
       try {
         const existingGuest = await getGuest(user.email);
-
         if (!existingGuest) {
-          await createGuest({ email: user.email, fullName: user.name });
+          const newGuestData = {
+            email: user.email,
+            fullName: user.name,
+          };
+          await createGuest(newGuestData);
         }
         return true;
       } catch {

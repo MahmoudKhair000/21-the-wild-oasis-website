@@ -1,8 +1,10 @@
-import SignInButton from "@/app/_components/SignInButton";
+import SignInButton from '@/app/_components/SignInButton';
 
 export const metadata = {
-  title: "Login"
-}
+  title: 'Login',
+};
+
+const baseUrl = process.env.NEXTAUTH_URL;
 
 export default function Page() {
   return (
@@ -11,7 +13,11 @@ export default function Page() {
         Sign in to access your guest area
       </h2>
 
-      <SignInButton />
+      <SignInButton
+      // baseUrl={baseUrl}
+      // 
+      />
+
     </div>
   );
 }
