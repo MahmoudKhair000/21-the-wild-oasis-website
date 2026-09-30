@@ -3,6 +3,7 @@
 import { updateGuest } from '@/app/_lib/actions';
 import Image from 'next/image';
 import { useFormStatus } from 'react-dom';
+import SubmitButton from './SubmitButton';
 
 function UpdateProfileForm({ guest, children }) {
   const { fullName, email, nationalID, countryFlag } = guest;
@@ -62,23 +63,12 @@ function UpdateProfileForm({ guest, children }) {
       </div>
 
       <div className="flex justify-end items-center gap-6">
-        <Button />
+        <SubmitButton
+          label={'Update Profile'}
+          pendingLabel={'Updating...'}
+        />
       </div>
     </form>
-  );
-}
-
-function Button() {
-  // it has to be wrapped in a form element
-  const status = useFormStatus();
-
-  return (
-    <button
-      disabled={status.pending}
-      className="bg-accent-500 px-8 py-4 text-primary-800 font-semibold hover:bg-accent-600 transition-all disabled:cursor-not-allowed disabled:bg-gray-500 disabled:text-gray-300"
-    >
-      {status.pending ? 'Updating....' : 'Update profile'}
-    </button>
   );
 }
 
