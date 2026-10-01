@@ -1,6 +1,5 @@
 'use client';
 // for interactivity
-import { deleteReservation } from '@/app/_lib/actions';
 import { TrashIcon } from '@heroicons/react/24/solid';
 import { useTransition } from 'react';
 import SpinnerMini from './SpinnerMini';
@@ -10,13 +9,13 @@ import SpinnerMini from './SpinnerMini';
 //   // to start a server action
 // }
 
-function DeleteReservation({ bookingId }) {
+function DeleteReservation({ bookingId, onDelete }) {
   // Navigations and server actions can be marked as transitions; HTTP requests are not automatically transitions.
   const [isPending, startTransition] = useTransition();
   // we can mark a server action as a react transition
   function handleDelete() {
     if (window.confirm('Are you sure you want to delete this reservation?')) {
-      startTransition(() => deleteReservation(bookingId));
+      startTransition(() => onDelete(bookingId));
     }
   }
 

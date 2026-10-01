@@ -1,34 +1,38 @@
 'use client';
 
-import { differenceInDays, isWithinInterval } from 'date-fns';
+import {
+  differenceInDays,
+  isPast,
+  isSameDay,
+  isWithinInterval,
+} from 'date-fns';
 import { useState } from 'react';
 import { DayPicker } from 'react-day-picker';
 // DayPicker uses Context, this component needs to be client
 import 'react-day-picker/style.css';
 import { useReservation } from '@/app/_contexts/ReservationContext';
 
-// function isAlreadyBooked(range, datesArr) {
-//   return (
-//     range.from
-//     && range.to
-//     && datesArr.some((date) =>
-//       isWithinInterval(date, { start: range.from, end: range.to }),
-//     )
-//   );
-// }
+function isAlreadyBooked(range, datesArr) {
+  return (
+    range.from
+    && range.to
+    && datesArr.some((date) =>
+      isWithinInterval(date, { start: range.from, end: range.to }),
+    )
+  );
+}
 
 function DateSelector({ cabin, settings, bookedDates }) {
   const { range, setRange, resetRange } = useReservation();
   console.log(range);
 
+  const displayRange = isAlreadyBooked(range, bookedDates) ? {} : range;
+
   const { regularPrice, discount } = cabin;
-  const numNights = range.from && range.to
-    ? differenceInDays(range.to, range.from)
-    : 0;
 
+  const numNights =
+    range.from && range.to ? differenceInDays(range.to, range.from) + 1 : 0;
   const cabinPrice = (regularPrice - discount) * numNights;
-
-  // SETTINGS
   const { minBookingLength, maxBookingLength } = settings;
 
   return (
@@ -38,21 +42,25 @@ function DateSelector({ cabin, settings, bookedDates }) {
         // mode config
         mode="range"
         // range config
-        selected={range}
-        onSelect={setRange}
-        // // onSelect={(range) => setRange(range)}
+        selected={displayRange}
+        onSelect={(selectedRange) =>
+          setRange(selectedRange ?? { from: undefined, to: undefined })
+        }
         // some layout config
         captionLayout="dropdown"
         // showOutsideDays
         numberOfMonths={2}
         //// min & max booking length
-        min={minBookingLength + 1}
+        min={minBookingLength}
         max={maxBookingLength}
         // Start & End Months
         startMonth={new Date()}
         endMonth={new Date(new Date().getFullYear() + 5, 11, 31)}
         // disabling booked dates
-        disabled={bookedDates}
+        disabled={(currDate) =>
+          isPast(currDate)
+          || bookedDates.some((date) => isSameDay(date, currDate))
+        }
         excludeDisabled
 
       // fromMonth={new Date()}

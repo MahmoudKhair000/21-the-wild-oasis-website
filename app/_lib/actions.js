@@ -41,6 +41,11 @@ export async function updateGuest(formData) {
 }
 
 export async function deleteReservation(bookingId) {
+  // await new Promise((res) => setTimeout(res, 2000));
+  // // optimistic state will appear untill the async code runs
+  // throw new Error();
+  // // the original state will be back in case of error
+
   const session = await auth();
   if (!session) throw new Error('You must be logged in');
 
