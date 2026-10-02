@@ -4,7 +4,7 @@
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { auth, signIn, signOut } from './auth';
-import { getBookings } from './data-service';
+import { getBookings, getSettings } from './data-service';
 import supabase from './supabase';
 
 export async function updateGuest(formData) {
@@ -40,7 +40,35 @@ export async function updateGuest(formData) {
   revalidatePath('/account/profile');
 }
 
-export async function deleteReservation(bookingId) {
+export async function createBooking(bookingData, formData) {
+  const session = await auth();
+  if (!session) throw new Error('You must be logged in');
+
+  const { breakfastPrice } = await getSettings();
+
+  // and we caould use a validation library here, like 'zod'
+  const newBooking = {
+    guestId: session.user.guestId,
+    ...bookingData,
+    numGuests: Number(formData.get('numGuests')),
+    observations: formData.get('observations').slice(0, 1000),
+    status: 'unconfirmed',
+    isPaid: false,
+  };
+  // console.log(newBooking);
+
+  const { error } = await supabase.from('bookings').insert([newBooking]);
+  // .select()
+  // .single();
+  if (error) throw new Error('Booking could not be created!');
+  // console.log(resData);
+
+  revalidatePath(`/cabins/${bookingData.cabinId}`);
+
+  redirect('/cabins/thankyou');
+}
+
+export async function deleteBooking(bookingId) {
   // await new Promise((res) => setTimeout(res, 2000));
   // // optimistic state will appear untill the async code runs
   // throw new Error();
@@ -63,7 +91,7 @@ export async function deleteReservation(bookingId) {
   revalidatePath('/account/reservations');
 }
 
-export async function updateReservation(formData) {
+export async function updateBooking(formData) {
   const bookingId = formData.get('reservationId');
   // 1. Authentication layer
   const session = await auth();

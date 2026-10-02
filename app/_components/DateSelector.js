@@ -2,15 +2,15 @@
 
 import {
   differenceInDays,
+  parseISO,
   isPast,
   isSameDay,
   isWithinInterval,
 } from 'date-fns';
-import { useState } from 'react';
 import { DayPicker } from 'react-day-picker';
 // DayPicker uses Context, this component needs to be client
-import 'react-day-picker/style.css';
 import { useReservation } from '@/app/_contexts/ReservationContext';
+import 'react-day-picker/style.css';
 
 function isAlreadyBooked(range, datesArr) {
   return (
@@ -24,12 +24,10 @@ function isAlreadyBooked(range, datesArr) {
 
 function DateSelector({ cabin, settings, bookedDates }) {
   const { range, setRange, resetRange } = useReservation();
-  console.log(range);
-
-  const displayRange = isAlreadyBooked(range, bookedDates) ? {} : range;
-
+  // console.log(range);
+  const bookedDateObjects = bookedDates.map((date) => parseISO(date));
+  const displayRange = isAlreadyBooked(range, bookedDateObjects) ? {} : range;
   const { regularPrice, discount } = cabin;
-
   const numNights =
     range.from && range.to ? differenceInDays(range.to, range.from) + 1 : 0;
   const cabinPrice = (regularPrice - discount) * numNights;
@@ -59,7 +57,7 @@ function DateSelector({ cabin, settings, bookedDates }) {
         // disabling booked dates
         disabled={(currDate) =>
           isPast(currDate)
-          || bookedDates.some((date) => isSameDay(date, currDate))
+          || bookedDateObjects.some((date) => isSameDay(date, currDate))
         }
         excludeDisabled
 

@@ -1,4 +1,4 @@
-import { eachDayOfInterval } from 'date-fns';
+import { eachDayOfInterval, format, parseISO } from 'date-fns';
 import supabase from './supabase';
 import { notFound } from 'next/navigation';
 import jsonCountries from './countries.json';
@@ -124,9 +124,9 @@ export async function getBookedDatesByCabinId(cabinId) {
   const bookedDates = data
     .map((booking) => {
       return eachDayOfInterval({
-        start: new Date(booking.startDate),
-        end: new Date(booking.endDate),
-      });
+        start: parseISO(booking.startDate),
+        end: parseISO(booking.endDate),
+      }).map((date) => format(date, 'yyyy-MM-dd'));
     })
     .flat();
 
