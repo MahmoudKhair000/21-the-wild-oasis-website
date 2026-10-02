@@ -44,8 +44,6 @@ export async function createBooking(bookingData, formData) {
   const session = await auth();
   if (!session) throw new Error('You must be logged in');
 
-  const { breakfastPrice } = await getSettings();
-
   // and we caould use a validation library here, like 'zod'
   const newBooking = {
     guestId: session.user.guestId,
